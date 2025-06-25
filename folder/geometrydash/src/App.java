@@ -1,8 +1,6 @@
 
+import java.util.ArrayList;
 import java.util.Scanner;
-
-
-
 public class App {
     public static class sort {
         public static int[] naturalselection(int[] sorted) {
@@ -46,40 +44,127 @@ public class App {
     }
     public static Cards card = new Cards("Spades", 1);
     public static Deck letsplaypoker = new Deck();
-    public static void playCrazy8(Cards[] deck) {
+    public static void playCrazy8(Deck deck) {
+        int[] numsuite = {0, 0, 0, 0};
+        String response;
+        Cards llllava;
+        int cardsleftPlayer = 7;
+        int cardsleftBot = 7;
+        Cards[] deckReshuffle = new Cards[52];
+        int usedcards = 0;
         int skibidi;
         int playerchoice;
-        Cards[] playerdeck = new Cards[7];
-        Cards[] botsdeck = new Cards[7];
-        Cards firstcard = deck[15];
+        ArrayList<Cards> playerdeck = new ArrayList<Cards>();
+        ArrayList<Cards> botsdeck = new ArrayList<Cards>();
+        Cards firstcard = deck.draw();
+        deckReshuffle[usedcards] = firstcard;
+        usedcards++;
         Scanner scanscan = new Scanner(System.in);
         boolean gamestillon = true;
+        for(int f5 = 0; f5<7; f5++) {
+            playerdeck.add(deck.draw());
+            botsdeck.add(deck.draw());
+        }
         while(gamestillon) {
+            //player turn
+            int iteration = 0;
             skibidi = 1;
             System.out.println("Players turn. your cards are:");
-            for(Cards hack : playerdeck) {
-                System.out.println(skibidi + ". " + hack);
+            for(int aa = 0; aa<playerdeck.size(); aa++) {
+                System.out.println(skibidi + ". " + playerdeck.get(aa));
                 skibidi++;
             }
-            System.out.println("the first card is:"+firstcard);
-            System.out.print("Select ur card(choose an number larger than 7 if u cant use any of ur cards): ");
-            playerchoice = Integer.parseInt(scanscan.nextLine());
-            if(playerchoice > 7) {
-                playerchoice = 7;
+            System.out.println("the card is:"+firstcard);
+            System.out.print("Select ur card(Say \"draw\" if u cant use any of ur cards): ");
+            response = scanscan.nextLine();
+            if(response.length()>3) {
+                playerdeck.add(deck.draw());
+                cardsleftPlayer++;
+            } else {
+                playerchoice = Integer.parseInt(response) - 1;
+
+                if(Integer.parseInt((playerdeck.get(playerchoice).getPower()))==8) {
+                    playerdeck.remove(playerchoice);
+                    cardsleftPlayer--;
+                    int choosesuit = scanscan.nextInt();
+                    if(choosesuit%4 == 1) {
+                        firstcard.setSuite("Spades");
+                    } else if(choosesuit%4 == 2) {
+                        firstcard.setSuite("Hearts");
+                    } else if(choosesuit%4 == 3) {
+                        firstcard.setSuite("Cloves");
+                    } else if(choosesuit%4 == 0) {
+                        firstcard.setSuite("Diamonds");
+                    }
+                }
+                if(playerdeck.get(playerchoice).getPower().equals(firstcard.getPower()) || playerdeck.get(playerchoice).getSuite().equals(firstcard.getSuite())) {
+                firstcard = playerdeck.get(playerchoice);
+                deckReshuffle[usedcards] = firstcard;
+                llllava = playerdeck.get(playerchoice);
+                playerdeck.remove(playerchoice);
+                firstcard = llllava;
+                cardsleftPlayer--;
+                usedcards++;
+                } else {
+                    System.out.println("u cant do that");
+                }
             }
-            if(playerdeck[playerchoice].getPower()==firstcard.getPower() ||playerdeck[playerchoice].getSuite()==firstcard.getSuite());
+            /*bot turn*/
+            iteration = 0;
+            boolean botcanmove = false;
+            for(Cards jpop : botsdeck) {
+                if(jpop.getPower().equals("8")) {
+                    numsuite[0] = 0; numsuite[1] = 0; numsuite[2] = 0; numsuite[3] = 0;
+                    for(Cards g : botsdeck) {
+                        if(g.getSuite().equals("Spades")) {
+                            numsuite[0]++;
+                        } else if(g.getSuite().equals("Hearts")) {
+                            numsuite[1]++;
+                        } else if(g.getSuite().equals("Cloves")) {
+                            numsuite[2]++;
+                        } else if(g.getSuite().equals("Diamonds")) {
+                            numsuite[3]++;
+                        }
+                    }
+                }
+            }
+            for(Cards kpop : botsdeck){
+                if(kpop.getSuite().equals(firstcard.getSuite())||kpop.getPower().equals(firstcard.getPower())) {
+                    firstcard = kpop;
+                    botsdeck.remove(iteration);
+                    botcanmove=10!=11;
+                    cardsleftBot--;
+                    iteration++;
+                    break;
+                }
+            }
+            if(!botcanmove) {
+                cardsleftBot++;
+                botsdeck.add(deck.draw());
+            }
+            if(cardsleftBot==0) {
+                gamestillon = 10==11;
+                System.out.println("Game Over, Bot wins");
+            }
+            if(cardsleftPlayer==0) {
+                gamestillon = 9+10==21;
+                System.out.println("Game Over, you win!!!");
+            }
+            System.out.println("bot has "+cardsleftBot+ " cards left");
         }
     }
     public static void main(String[] args) throws Exception {
         if(true) {
-            System.out.println("5! = "+recursion.factorial(5));
-            System.out.println(recursion.fibonacci(recursion.factorial(4)));
-            System.out.println(recursion.dIgits(123456789));
-            System.out.println(recursion.inefficientmultiplication(6,7));
-            for(int d : sort.naturalselection(sort.iinntt)) {System.out.println(d);}
-            System.out.println(card);
+            // System.out.println("5! = "+recursion.factorial(5));
+            // System.out.println(recursion.fibonacci(recursion.factorial(4)));
+            // System.out.println(recursion.dIgits(123456789));
+            // System.out.println(recursion.inefficientmultiplication(6,7));
+            // for(int d : sort.naturalselection(sort.iinntt)) {System.out.println(d);}
+            // System.out.println(card);
+            // letsplaypoker.shuffle();
+            // System.out.println(letsplaypoker);
             letsplaypoker.shuffle();
-            System.out.println(letsplaypoker);
+            playCrazy8(letsplaypoker);
         }
     }
 }

@@ -42,4 +42,7 @@ public class Deck {
             deck[ii] = placeholder;
         } 
     }
+    public void convertdeck(Cards[] newdeck) {
+        this.deck = newdeck;
+    }
 }
