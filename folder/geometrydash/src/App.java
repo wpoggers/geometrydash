@@ -3,11 +3,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class App {
     public static class sort {
-        public static int[] naturalselection(int[] sorted) {
-            int[] returnlist = sorted;
-            int swap;
+        public static double[] naturalselection(double[] sorted) {
+            double[] returnlist = sorted;
+            double swap;
             int invisibleline = 0;
-            int tiniest;
+            double tiniest;
             for(int ggs = 0;ggs<returnlist.length-1;ggs++) {
                 tiniest = returnlist[invisibleline];
                 for(int rice = invisibleline; rice < returnlist.length-1; rice++) {
@@ -44,8 +44,12 @@ public class App {
     }
     public static Cards card = new Cards("Spades", 1);
     public static Deck letsplaypoker = new Deck();
+
     public static void playCrazy8(Deck deck) {
-        int[] numsuite = {0, 0, 0, 0};
+        int vsause;
+        boolean doCrazy8Turn = false;
+        boolean doNormalTurn = true;
+        double[] numsuite = {0, 0, 0, 0};
         String response;
         Cards llllava;
         int cardsleftPlayer = 7;
@@ -84,8 +88,10 @@ public class App {
                 playerchoice = Integer.parseInt(response) - 1;
 
                 if(Integer.parseInt((playerdeck.get(playerchoice).getPower()))==8) {
+                    doNormalTurn = 0==1;
                     playerdeck.remove(playerchoice);
                     cardsleftPlayer--;
+                    System.out.println("Select a suit(1 = Spades, 2 = Hearts, 3 = Cloves, 4 = Diamonds)");
                     int choosesuit = scanscan.nextInt();
                     if(choosesuit%4 == 1) {
                         firstcard.setSuite("Spades");
@@ -97,24 +103,29 @@ public class App {
                         firstcard.setSuite("Diamonds");
                     }
                 }
-                if(playerdeck.get(playerchoice).getPower().equals(firstcard.getPower()) || playerdeck.get(playerchoice).getSuite().equals(firstcard.getSuite())) {
-                firstcard = playerdeck.get(playerchoice);
-                deckReshuffle[usedcards] = firstcard;
-                llllava = playerdeck.get(playerchoice);
-                playerdeck.remove(playerchoice);
-                firstcard = llllava;
-                cardsleftPlayer--;
-                usedcards++;
-                } else {
-                    System.out.println("u cant do that");
+                if(doNormalTurn) {
+                    if(playerdeck.get(playerchoice).getPower().equals(firstcard.getPower()) || playerdeck.get(playerchoice).getSuite().equals(firstcard.getSuite())) {
+                    firstcard = playerdeck.get(playerchoice);
+                    deckReshuffle[usedcards] = firstcard;
+                    llllava = playerdeck.get(playerchoice);
+                    playerdeck.remove(playerchoice);
+                    firstcard = llllava;
+                    cardsleftPlayer--;
+                    usedcards++;
+                    } else {
+                        System.out.println("u cant do that");
+                    }
                 }
             }
             /*bot turn*/
             iteration = 0;
             boolean botcanmove = false;
+            /*Crazy 8 check*/
             for(Cards jpop : botsdeck) {
                 if(jpop.getPower().equals("8")) {
-                    numsuite[0] = 0; numsuite[1] = 0; numsuite[2] = 0; numsuite[3] = 0;
+                    doCrazy8Turn = true;
+                    numsuite[0] = 0; numsuite[1] = 0.1; numsuite[2] = 0.2; numsuite[3] = 0.3;
+                    botcanmove=true;
                     for(Cards g : botsdeck) {
                         if(g.getSuite().equals("Spades")) {
                             numsuite[0]++;
@@ -128,14 +139,26 @@ public class App {
                     }
                 }
             }
-            for(Cards kpop : botsdeck){
-                if(kpop.getSuite().equals(firstcard.getSuite())||kpop.getPower().equals(firstcard.getPower())) {
-                    firstcard = kpop;
-                    botsdeck.remove(iteration);
-                    botcanmove=10!=11;
-                    cardsleftBot--;
-                    iteration++;
-                    break;
+            int h = 0;
+            if(doCrazy8Turn) {
+                numsuite = sort.naturalselection(numsuite);
+                vsause = (int) numsuite[3];
+                h = (int) 10*(numsuite[3]-vsause);
+                if(h == 0) {firstcard.setSuite("Spades");
+                } else if(h==1) {firstcard.setSuite("Hearts");
+                } else if(h==2) {firstcard.setSuite("Cloves");
+                } else if(h==3) {firstcard.setSuite("Diamonds");}
+            }
+            if(!botcanmove) {
+                for(Cards kpop : botsdeck){
+                    if(kpop.getSuite().equals(firstcard.getSuite())||kpop.getPower().equals(firstcard.getPower())) {
+                        firstcard = kpop;
+                        botsdeck.remove(iteration);
+                        botcanmove=10!=11;
+                        cardsleftBot--;
+                        iteration++;
+                        break;
+                    }
                 }
             }
             if(!botcanmove) {
