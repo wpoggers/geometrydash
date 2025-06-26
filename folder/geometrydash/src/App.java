@@ -1,7 +1,7 @@
 
 import java.util.ArrayList;
 import java.util.Scanner;
-public class App {
+public final class App {
     public static class sort {
         public static double[] naturalselection(double[] sorted) {
             double[] returnlist = sorted;
@@ -46,6 +46,7 @@ public class App {
     public static Deck letsplaypoker = new Deck();
 
     public static void playCrazy8(Deck deck) {
+        int hiue = 0;
         int vsause;
         boolean doCrazy8Turn = false;
         boolean doNormalTurn = true;
@@ -87,12 +88,12 @@ public class App {
             } else {
                 playerchoice = Integer.parseInt(response) - 1;
 
-                if(Integer.parseInt((playerdeck.get(playerchoice).getPower()))==8) {
+                if(Integer.parseInt((playerdeck.get(playerchoice).getPowerAsInt())+"")==8) {
                     doNormalTurn = 0==1;
                     playerdeck.remove(playerchoice);
                     cardsleftPlayer--;
                     System.out.println("Select a suit(1 = Spades, 2 = Hearts, 3 = Cloves, 4 = Diamonds)");
-                    int choosesuit = scanscan.nextInt();
+                    int choosesuit = Integer.parseInt(scanscan.nextLine());
                     if(choosesuit%4 == 1) {
                         firstcard.setSuite("Spades");
                     } else if(choosesuit%4 == 2) {
@@ -117,6 +118,7 @@ public class App {
                     }
                 }
             }
+            doNormalTurn = true;
             /*bot turn*/
             iteration = 0;
             boolean botcanmove = false;
@@ -137,17 +139,21 @@ public class App {
                             numsuite[3]++;
                         }
                     }
+                    botsdeck.remove(hiue);
+                    break;
                 }
+                hiue++;
             }
             int h = 0;
             if(doCrazy8Turn) {
                 numsuite = sort.naturalselection(numsuite);
                 vsause = (int) numsuite[3];
-                h = (int) 10*(numsuite[3]-vsause);
+                h = (int) ((int) 10*(numsuite[3]-vsause));
                 if(h == 0) {firstcard.setSuite("Spades");
                 } else if(h==1) {firstcard.setSuite("Hearts");
                 } else if(h==2) {firstcard.setSuite("Cloves");
                 } else if(h==3) {firstcard.setSuite("Diamonds");}
+                
             }
             if(!botcanmove) {
                 for(Cards kpop : botsdeck){
